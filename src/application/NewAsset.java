@@ -51,7 +51,7 @@ public class NewAsset extends VBox implements LayoutHelper{
 	private final String line4 = "Purchase date: ";
 	private final String line5 = "Description: ";
 	private final String line6 = "Purchased Value: ";
-	private final String line7 = "Warranty\nExpiration Date";
+	private final String line7 = "Warranty Exp Date: ";
 	
 
 	public NewAsset() {
