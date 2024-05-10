@@ -123,7 +123,13 @@ public class CategorySearch extends VBox implements LayoutHelper {
                     moreButton.setOnAction(event -> {
                         // Handle "More..." button click
                         Asset asset = getTableView().getItems().get(getIndex());
-                        // Implement your logic to show more details about the asset
+                     // Create a new AssetDisplay stage with the selected Asset
+                        Stage assetDisplayStage = new Stage();
+                        AssetDisplay assetDisplay = new AssetDisplay(asset);
+                        Scene scene = new Scene(assetDisplay);
+                        assetDisplayStage.setScene(scene);
+                        assetDisplayStage.show();
+                        
                     });
                 }
 

@@ -81,6 +81,25 @@ public interface LayoutHelper {
 		
 		return label;
 	}
+	
+	public default HBox createText(String line, String textToWrite) {
+
+		HBox res = new HBox();
+		
+		res.getChildren().add(emptySpace());
+
+		
+		// text field
+		Text text = new Text();
+		text.setFont(Font.font("Arial", 18));
+		text.setText(textToWrite);
+		text.prefWidth(180);
+
+		res.getChildren().addAll(createLabel(line), text);
+		res.setAlignment(Pos.BASELINE_CENTER);
+		return res;
+	}
+	
 	/**
 	 * Create line with TextField with redAsterisk.
 	 * @param arg

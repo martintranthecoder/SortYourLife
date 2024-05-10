@@ -1,18 +1,28 @@
 package application;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import model.Asset;
+import model.AssetCSVReader;
 import model.Location;
 import model.LocationCSVReader;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -20,6 +30,10 @@ public class LocationSearch extends VBox implements LayoutHelper {
     private HashMap<String, Location> locations = new HashMap<>();
     private ObservableList<String> locationList = FXCollections.observableArrayList();
     private final String file = "location.csv";
+    
+    private HashMap<String, Asset> assets = new HashMap<>();
+    private ObservableList<String> assetList = FXCollections.observableArrayList();
+    private final String asset_file = "asset.csv";
 
     private ArrayList<HBox> layout = new ArrayList<>();
     private final String title = "Search by Location";
@@ -58,9 +72,90 @@ public class LocationSearch extends VBox implements LayoutHelper {
 				alert.setHeaderText("Error");
 				alert.setContentText("Location can not be empty!");
 				alert.showAndWait();
+            } else {
+            	showAssetsForLocation(locationName);
             }
                 
             
         });
+    }
+    
+    private void showAssetsForLocation(String selectedLocation) {
+        ObservableList<Asset> assetsForLocation = FXCollections.observableArrayList();
+        
+        try {
+            AssetCSVReader assetReader = new AssetCSVReader();
+            assets = assetReader.readData(asset_file);
+            assetList.addAll(assets.keySet());
+            
+        } catch (IOException e) {
+            e.printStackTrace(); 
+        }
+        
+        // Filter the list of assets to include only those belonging to the selected category
+        for (Asset asset : assets.values()) {
+            if (asset.getLocation().getName().equals(selectedLocation)) {
+                assetsForLocation.add(asset);
+            }
+        }
+
+        // Create a new stage to display the assets
+        Stage assetsStage = new Stage();
+        TableView<Asset> tableView = new TableView<>();
+        TableColumn<Asset, String> assetNameColumn = new TableColumn<>("Asset Name");
+        assetNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+
+        TableColumn<Asset, String> locationColumn = new TableColumn<>("Location");
+		locationColumn.setCellValueFactory(cellData -> {
+			Asset asset = cellData.getValue();
+			return new SimpleStringProperty(asset.getLocation().getName());
+		});
+
+        TableColumn<Asset, LocalDate> warrantyExpColumn = new TableColumn<>("Warranty Expiration");
+        warrantyExpColumn.setCellValueFactory(new PropertyValueFactory<>("warrantyExpDate"));
+
+        TableColumn<Asset, Void> moreButtonColumn = new TableColumn<>("Details");
+        moreButtonColumn.setCellFactory(param -> {
+            TableCell<Asset, Void> cell = new TableCell<>() {
+                private final Button moreButton = new Button("More...");
+
+                {
+                    moreButton.setOnAction(event -> {
+                        // Handle "More..." button click
+                        Asset asset = getTableView().getItems().get(getIndex());
+                        // Implement your logic to show more details about the asset
+                    });
+                }
+
+                @Override
+                protected void updateItem(Void item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setGraphic(null);
+                    } else {
+                        setGraphic(moreButton);
+                    }
+                }
+            };
+            return cell;
+        });
+
+        tableView.getColumns().addAll(assetNameColumn, locationColumn, warrantyExpColumn, moreButtonColumn);
+        tableView.setItems(assetsForLocation);
+        
+        
+        // Calculate the total width required by the columns
+        double totalWidth = assetNameColumn.getWidth() + locationColumn.getWidth() + warrantyExpColumn.getWidth() + moreButtonColumn.getWidth();
+        
+        // Add some padding to the calculated width
+        double padding = 50; // Adjust this value as needed
+        
+        // Set the preferred width of the stage
+        assetsStage.setMinWidth(totalWidth + padding);
+
+        VBox root = new VBox(tableView);
+        Scene scene = new Scene(root);
+        assetsStage.setScene(scene);
+        assetsStage.show();
     }
 }
