@@ -2,3 +2,6 @@ Asset Name,Category,Location,Purchase Date,Description,Purchased Value,Warranty 
 pen,stationery,table,,,0.0,
 Harry Potter ,book,book shelf,,Harry Potter p.1,null,2024-05-14
 OOP ,book,table,,OOP textbook,50.0,2024-04-23
+notebook,stationery,table,,,2.0,2024-03-30
+Pride and Prejudice,book,book shelf,2024-05-05,,null,2024-06-04
+highlighter,stationery,backpack,2024-05-05,,null,2024-04-16
