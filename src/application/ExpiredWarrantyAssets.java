@@ -51,7 +51,7 @@ public class ExpiredWarrantyAssets extends VBox {
         expiryDateCol.setCellValueFactory(new PropertyValueFactory<>("warrantyExpDate"));
         expiryDateCol.setMinWidth(200);
 
-        TableColumn<Asset, Void> editCol = new TableColumn<>("Edit");
+        TableColumn<Asset, Void> editCol = new TableColumn<>("Details");
         editCol.setCellFactory(new Callback<TableColumn<Asset, Void>, TableCell<Asset, Void>>() {
             @Override
             public TableCell<Asset, Void> call(final TableColumn<Asset, Void> param) {
