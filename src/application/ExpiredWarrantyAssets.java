@@ -13,12 +13,14 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import model.Asset;
+import model.AssetCSVReader;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class ExpiredWarrantyAssets extends VBox {
@@ -97,32 +99,22 @@ public class ExpiredWarrantyAssets extends VBox {
     private void loadExpiredAssets() {
         new Thread(() -> {
             List<Asset> assets = new ArrayList<>();
-            String line;  // Declare line outside of the try block
-            try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-                boolean isFirstLine = true;
-                while ((line = br.readLine()) != null) {
-                    String finalLine = line;  // Create a final copy of line to use in lambda
-                    if (isFirstLine) {
-                        isFirstLine = false;
-                        continue;
-                    }
-                    String[] values = finalLine.split(",");
-                    if (values.length < 7) continue;
-                    try {
-                        String name = values[0].trim();
-                        LocalDate warrantyExpDate = LocalDate.parse(values[6].trim());
-                        if (warrantyExpDate.isBefore(LocalDate.now())) {
-                            Asset asset = new Asset();
-                            asset.setName(name);
-                            asset.setWarrantyExpDate(warrantyExpDate);
-                            assets.add(asset);
-                        }
-                    } catch (Exception e) {
-                        Platform.runLater(() -> System.err.println("Error processing line: " + finalLine));
+            try {
+                AssetCSVReader assetReader = new AssetCSVReader();
+                HashMap<String, Asset> assetMap = assetReader.readData(file);
+
+                // Iterate over the assets and add expired ones to the list
+                for (Asset asset : assetMap.values()) {
+                    LocalDate warrantyExpDate = asset.getWarrantyExpDate();
+                    if (warrantyExpDate != null && warrantyExpDate.isBefore(LocalDate.now())) {
+                        assets.add(asset);
                     }
                 }
+
+                // Update the UI on the JavaFX application thread
                 Platform.runLater(() -> table.getItems().setAll(assets));
             } catch (IOException e) {
+                // Handle file reading error
                 Platform.runLater(() -> System.err.println("Failed to read the file: " + e.getMessage()));
             }
         }).start();
