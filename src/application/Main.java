@@ -19,6 +19,7 @@ public class Main extends Application {
 	private SearchAsset search = new SearchAsset();
 	private CategorySearch cat = new CategorySearch();
 	private LocationSearch loc = new LocationSearch();
+	private ExpiredWarrantyAssets expiredWarrantyAssets = new ExpiredWarrantyAssets();
 	//Testing Page for single element
 	//private TestPage test = new TestPage();
 
@@ -30,6 +31,7 @@ public class Main extends Application {
 		search.setVisible("Search Page".equals(choice));
 		cat.setVisible("Search by Category Page".equals(choice));
 		loc.setVisible("Search by Location Page".equals(choice));
+		expiredWarrantyAssets.setVisible("Expired Warranty Assets".equals(choice));
 		//test page
 		//test.setVisible("Reports Page".equals(choice));
 	});
@@ -42,6 +44,7 @@ public class Main extends Application {
 		search.setVisible("Search Page".equals(choice));
 		cat.setVisible("Search by Category Page".equals(choice));
 		loc.setVisible("Search by Location Page".equals(choice));
+		expiredWarrantyAssets.setVisible("Expired Warranty Assets".equals(choice));
 		homeNavigator.setVisible(!welcomePage.isVisible());
 		//test page
 		//test.setVisible("Reports Page".equals(choice));
@@ -49,7 +52,7 @@ public class Main extends Application {
 
 	public void start(Stage primaryStage) throws Exception {
 		
-		rightSection.getChildren().addAll(welcomePage, newCategory, newLocation, newAsset, search, cat, loc, homeNavigator);
+		rightSection.getChildren().addAll(welcomePage, newCategory, newLocation, newAsset, search, cat, loc, expiredWarrantyAssets, homeNavigator);
 		initializePage();
 
 //		rightSection.getChildren().add(test);
@@ -79,6 +82,7 @@ public class Main extends Application {
 		//Test page visible
 		rightSection.getChildren().get(6).setVisible(false);
 		rightSection.getChildren().get(7).setVisible(false);
+		rightSection.getChildren().get(8).setVisible(false);
 	}
 
 	public static void main(String[] args) {

@@ -12,6 +12,7 @@ public class NavigationMenu extends VBox{
 	private Button button_Search;
 	private Button button_CatSearch;
 	private Button button_LocSearch;
+	private Button button_ExpiredWarranty;
 
 	
 	public NavigationMenu(Consumer<String> choice) {
@@ -23,6 +24,7 @@ public class NavigationMenu extends VBox{
     	button_Search = navigationButton("Search");
     	button_CatSearch = navigationButton("Search by Category");
     	button_LocSearch = navigationButton("Search by Location");
+    	button_ExpiredWarranty = navigationButton("Expired Warranty Assets");
         
         initialize();
         buttonAction(choice);
@@ -33,7 +35,7 @@ public class NavigationMenu extends VBox{
         this.setStyle("-fx-background-color: rgba(72, 155, 105, 0.7); -fx-padding: 30;");
         this.setMinSize(240, 600);
         // Add buttons to the VBox
-        this.getChildren().addAll(button_NewCategory, button_NewLocation, button_NewAsset, button_Search, button_CatSearch, button_LocSearch);
+        this.getChildren().addAll(button_NewCategory, button_NewLocation, button_NewAsset, button_Search, button_CatSearch, button_LocSearch, button_ExpiredWarranty);
     }
     
     // set action for button
@@ -46,6 +48,7 @@ public class NavigationMenu extends VBox{
         button_Search.setOnAction(e -> choice.accept("Search Page"));
         button_CatSearch.setOnAction(e -> choice.accept("Search by Category Page"));
         button_LocSearch.setOnAction(e -> choice.accept("Search by Location Page"));
+        button_ExpiredWarranty.setOnAction(e -> choice.accept("Expired Warranty Assets"));
         // ... set actions for all 5 buttons ...
     }
     
