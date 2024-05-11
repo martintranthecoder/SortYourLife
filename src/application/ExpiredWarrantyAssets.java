@@ -15,8 +15,6 @@ import javafx.util.Callback;
 import model.Asset;
 import model.AssetCSVReader;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -62,7 +60,6 @@ public class ExpiredWarrantyAssets extends VBox {
                     {
                         btn.setOnAction((event) -> {
                             Asset data = getTableView().getItems().get(getIndex());
-//                            openViewAssetPage(data);
                             Stage assetDisplayStage = new Stage();
                             AssetDisplay assetDisplay = new AssetDisplay(data);
                             Scene scene = new Scene(assetDisplay, 700, 450);
@@ -87,14 +84,6 @@ public class ExpiredWarrantyAssets extends VBox {
 
         table.getColumns().addAll(nameCol, expiryDateCol, editCol);
     }
-
-//    private void openViewAssetPage(Asset asset) {
-//        ViewAssetDetails viewAssetDetails = new ViewAssetDetails(asset);
-//        Stage stage = new Stage();
-//        stage.setScene(new Scene(viewAssetDetails, 700, 450)); // Set the size as per your requirement
-//        stage.setTitle("View Asset Details");
-//        stage.show();
-//    }
 
     private void loadExpiredAssets() {
         new Thread(() -> {
